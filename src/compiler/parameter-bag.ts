@@ -17,7 +17,7 @@ export class ParameterBag {
         this.isReserved = typeof reserved === "function" ? reserved : () => false;
     }
 
-    bind(value: unknown): string {
+    public bind(value: unknown): string {
         let name: string;
         do {
             name = `${this.prefix}_${this.index++}`;
@@ -27,7 +27,7 @@ export class ParameterBag {
         return `:${name}`;
     }
 
-    snapshot(): Readonly<Record<string, unknown>> {
+    public snapshot(): Readonly<Record<string, unknown>> {
         return Object.freeze({ ...this.values });
     }
 }

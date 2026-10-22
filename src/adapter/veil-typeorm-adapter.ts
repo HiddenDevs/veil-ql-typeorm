@@ -5,7 +5,7 @@ import { ParameterBag } from "../compiler/parameter-bag.js";
 import { QueryCompiler } from "../compiler/query-compiler.js";
 import type { CompiledQuery, FunctionTranslator } from "../compiler/types.js";
 import type { SqlDialect } from "../dialects/sql-dialect.js";
-import { PortableSqlDialect } from "../dialects/strategies.js";
+import { PortableSqlDialect } from "../dialects/portable-sql-dialect.js";
 import { dialectForDriver } from "./resolve-dialect.js";
 import type { AdapterOptions, CompileOptions, QueryInput } from "./types.js";
 
@@ -27,7 +27,7 @@ export class VeilTypeOrmAdapter {
         new ParameterBag(this.parameterPrefix);
     }
 
-    compile(input: QueryInput, options: CompileOptions = {}): CompiledQuery {
+    public compile(input: QueryInput, options: CompileOptions = {}): CompiledQuery {
         const query = this.validate(input);
         const compiler = new QueryCompiler(
             this.fields,
@@ -39,7 +39,7 @@ export class VeilTypeOrmAdapter {
         return compiler.compile(query);
     }
 
-    apply<Entity extends ObjectLiteral>(
+    public apply<Entity extends ObjectLiteral>(
         builder: SelectQueryBuilder<Entity>,
         input: QueryInput,
     ): SelectQueryBuilder<Entity> {

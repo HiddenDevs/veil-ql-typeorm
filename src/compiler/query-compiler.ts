@@ -18,7 +18,7 @@ export class QueryCompiler {
         this.returns = new Map(description.functions.map((fn) => [fn.name, fn.returns ?? "boolean"]));
     }
 
-    compile(query: Pick<Query, "filter" | "sorts">): CompiledQuery {
+    public compile(query: Pick<Query, "filter" | "sorts">): CompiledQuery {
         const sql = this.expression(query.filter);
         const sorts = query.sorts.map((sort) =>
             Object.freeze({ field: this.fields.resolve(sort.field), direction: sort.direction }),

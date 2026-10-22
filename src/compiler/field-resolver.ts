@@ -29,7 +29,7 @@ export class FieldResolver {
         }
     }
 
-    resolve(path: PathExpr): string {
+    public resolve(path: PathExpr): string {
         const field = path.parts.join(".");
         const target = this.mappings.get(field);
         if (target === undefined) {
@@ -42,7 +42,7 @@ export class FieldResolver {
         return target;
     }
 
-    typeOf(path: PathExpr): string {
+    public typeOf(path: PathExpr): string {
         this.resolve(path);
         return this.types.get(path.parts.join("."))!;
     }

@@ -242,17 +242,21 @@ src/
     query-compiler.ts
     types.ts
   dialects/
+    mysql-dialect.ts
+    portable-sql-dialect.ts
+    postgresql-dialect.ts
     sql-dialect.ts
-    strategies.ts
+    sqlite-dialect.ts
   errors.ts
   index.ts
 ```
 
 The adapter owns TypeORM interaction and driver selection. The compiler depends
-on the dialect interface, not concrete database strategies or TypeORM. Public
-contracts live in the corresponding `types.ts` modules, separate from their
-implementations. Internal imports target their owning modules directly;
-[src/index.ts](src/index.ts) remains the single consumer-facing entry point.
+on the dialect interface, not concrete database strategies or TypeORM. Each SQL
+dialect has a dedicated implementation module. Public contracts live in the
+corresponding `types.ts` modules, separate from their implementations. Internal
+imports target their owning modules directly; [src/index.ts](src/index.ts)
+remains the single consumer-facing entry point.
 
 Only the adapter, dialects, errors, and public configuration/result types are
 exported from [src/index.ts](src/index.ts). Compiler implementation details remain

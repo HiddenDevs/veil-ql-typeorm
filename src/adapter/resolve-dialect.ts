@@ -1,5 +1,7 @@
 import type { SqlDialect } from "../dialects/sql-dialect.js";
-import { MySqlDialect, PostgreSqlDialect, SqliteDialect } from "../dialects/strategies.js";
+import { MySqlDialect } from "../dialects/mysql-dialect.js";
+import { PostgreSqlDialect } from "../dialects/postgresql-dialect.js";
+import { SqliteDialect } from "../dialects/sqlite-dialect.js";
 import { AdapterError } from "../errors.js";
 
 export function dialectForDriver(driver: string): SqlDialect {
