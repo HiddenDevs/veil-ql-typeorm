@@ -1,6 +1,6 @@
 {
     "name": "@hiddendevs/veil-ql-typeorm",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Safely apply validated Veil-QL filters and sorting to TypeORM query builders.",
     "repository": {
         "type": "git",
