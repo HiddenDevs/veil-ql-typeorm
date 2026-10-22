@@ -7,8 +7,8 @@ bound as parameters rather than interpolated into SQL.
 
 ## Install
 
-Requires Node.js 22+, TypeORM 0.3.28+, and Veil-QL 1.0.2+ (within their respective
-0.3.x and 1.x release lines). Install your database driver separately.
+Requires Node.js 22+, TypeORM `^0.3.28`, and Veil-QL `^1.0.2`, matching this
+package's peer dependency ranges. Install your database driver separately.
 
 ```sh
 npm install @hiddendevs/veil-ql-typeorm @hiddendevs/veil-ql typeorm
@@ -142,12 +142,13 @@ Supported translations:
   `AND`, `OR`, `NOT`, unary minus, and all scalar comparison operators.
 - `== null` / `!= null` on either side become `IS NULL` / `IS NOT NULL`, including
   nullable list fields.
-- `IN` / `NOT IN` with flat literal lists, including expressions as list elements.
-  Empty lists become constant false / true predicates instead of invalid `IN ()`.
+- `IN` / `NOT IN` with flat lists of literals or scalar expressions. Nested lists
+  are rejected. Empty lists become constant false / true predicates instead of
+  invalid `IN ()`.
 - `contains(string, string)` performs case-sensitive literal substring matching;
   `%`, `_`, and backslashes are not wildcard syntax.
 - `contains([a, b], value)` uses membership on every dialect.
-- PostgreSQL membership against native one-dimensional array columns or
+- PostgreSQL membership against native array columns or
   list-returning custom functions, including `contains(tags, "trusted")`.
 - Multi-column sorting, restricted by the schema's `sortable` configuration.
 
@@ -279,6 +280,7 @@ Vitest covers generated SQL and executes QueryBuilders against an in-memory
 SQLite database using `sql.js`. Tests include existing predicates, OR grouping,
 injection-shaped values, parameter collisions, parent/subquery interaction,
 joins, renamed columns, pagination, sorting, AST validation, and custom functions.
-PostgreSQL/MySQL dialect SQL is unit-tested; tests do not require live database
+All dialect SQL translations are unit-tested. SQLite execution is covered through
+`sql.js`; PostgreSQL and MySQL integration are not run against live database
 servers. Run database-specific integration checks against your deployed versions
 and column types before release.
