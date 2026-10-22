@@ -1,10 +1,5 @@
-import { AdapterError } from "./errors.js";
-
-export interface SqlDialect {
-    readonly name: string;
-    contains(text: string, search: string): string;
-    membership(value: string, collection: string): string;
-}
+import { AdapterError } from "../errors.js";
+import type { SqlDialect } from "./sql-dialect.js";
 
 export class PortableSqlDialect implements SqlDialect {
     readonly name: string = "portable";
@@ -49,27 +44,5 @@ export class MySqlDialect extends PortableSqlDialect {
 
     override contains(text: string, search: string): string {
         return `(LOCATE(CAST(${search} AS BINARY), CAST(${text} AS BINARY)) > 0)`;
-    }
-}
-
-export function dialectForDriver(driver: string): SqlDialect {
-    switch (driver) {
-        case "postgres":
-        case "aurora-postgres":
-        case "cockroachdb":
-            return new PostgreSqlDialect();
-        case "sqlite":
-        case "better-sqlite3":
-        case "sqljs":
-            return new SqliteDialect();
-        case "mysql":
-        case "mariadb":
-        case "aurora-mysql":
-            return new MySqlDialect();
-        default:
-            throw new AdapterError(
-                "UnsupportedDialect",
-                `Unsupported TypeORM driver '${driver}'; supply a SqlDialect.`,
-            );
     }
 }

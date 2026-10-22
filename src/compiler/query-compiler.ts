@@ -1,22 +1,9 @@
-import type { Expr, Query, SchemaDescription, SortDirection } from "@hiddendevs/veil-ql";
-import type { SqlDialect } from "./dialects.js";
-import { AdapterError } from "./errors.js";
+import type { Expr, Query, SchemaDescription } from "@hiddendevs/veil-ql";
+import type { SqlDialect } from "../dialects/sql-dialect.js";
+import { AdapterError } from "../errors.js";
 import type { FieldResolver } from "./field-resolver.js";
-import { ParameterBag } from "./parameters.js";
-
-export interface FunctionTranslationContext {
-    readonly args: readonly Expr[];
-    compile(expression: Expr): string;
-    bind(value: unknown): string;
-}
-
-export type FunctionTranslator = (context: FunctionTranslationContext) => string;
-
-export interface CompiledQuery {
-    readonly sql: string;
-    readonly parameters: Readonly<Record<string, unknown>>;
-    readonly sorts: readonly { readonly field: string; readonly direction: SortDirection }[];
-}
+import type { ParameterBag } from "./parameter-bag.js";
+import type { CompiledQuery, FunctionTranslator } from "./types.js";
 
 export class QueryCompiler {
     private readonly returns: ReadonlyMap<string, string>;

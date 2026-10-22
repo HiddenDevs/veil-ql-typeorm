@@ -1,4 +1,4 @@
-import { AdapterError } from "./errors.js";
+import { AdapterError } from "../errors.js";
 
 export class ParameterBag {
     private readonly reserved: Set<string>;

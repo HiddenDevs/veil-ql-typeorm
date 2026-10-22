@@ -1,26 +1,13 @@
-import type { Expr, Query, Schema } from "@hiddendevs/veil-ql";
+import type { Query, Schema } from "@hiddendevs/veil-ql";
 import type { ObjectLiteral, SelectQueryBuilder } from "typeorm";
-import { QueryCompiler } from "./compiler.js";
-import type { CompiledQuery, FunctionTranslator } from "./compiler.js";
-import { dialectForDriver, PortableSqlDialect } from "./dialects.js";
-import type { SqlDialect } from "./dialects.js";
-import { FieldResolver } from "./field-resolver.js";
-import { ParameterBag } from "./parameters.js";
-
-export type QueryInput = string | Expr | Query;
-
-export interface AdapterOptions {
-    readonly schema: Schema;
-    readonly fields: Readonly<Record<string, string>>;
-    readonly functions?: Readonly<Record<string, FunctionTranslator>>;
-    readonly dialect?: SqlDialect;
-    readonly parameterPrefix?: string;
-}
-
-export interface CompileOptions {
-    readonly dialect?: SqlDialect;
-    readonly reservedParameters?: readonly string[] | ((name: string) => boolean);
-}
+import { FieldResolver } from "../compiler/field-resolver.js";
+import { ParameterBag } from "../compiler/parameter-bag.js";
+import { QueryCompiler } from "../compiler/query-compiler.js";
+import type { CompiledQuery, FunctionTranslator } from "../compiler/types.js";
+import type { SqlDialect } from "../dialects/sql-dialect.js";
+import { PortableSqlDialect } from "../dialects/strategies.js";
+import { dialectForDriver } from "./resolve-dialect.js";
+import type { AdapterOptions, CompileOptions, QueryInput } from "./types.js";
 
 export class VeilTypeOrmAdapter {
     private readonly schema: Schema;

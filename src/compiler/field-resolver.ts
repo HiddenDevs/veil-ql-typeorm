@@ -1,5 +1,5 @@
 import type { PathExpr, SchemaDescription } from "@hiddendevs/veil-ql";
-import { AdapterError } from "./errors.js";
+import { AdapterError } from "../errors.js";
 
 export class FieldResolver {
     private readonly mappings: ReadonlyMap<string, string>;

@@ -219,14 +219,40 @@ half-open UTF-8 byte offsets, not JavaScript string indices.
 The implementation uses a small set of focused objects rather than a class for
 every AST node:
 
-| Component                              | Responsibility / Pattern                                                   |
-| -------------------------------------- | -------------------------------------------------------------------------- |
-| [VeilTypeOrmAdapter](src/adapter.ts)   | Adapter and facade: validate input and apply a compiled query to TypeORM.  |
-| [QueryCompiler](src/compiler.ts)       | AST interpreter: recursively translate expressions with explicit grouping. |
-| [SqlDialect](src/dialects.ts)          | Strategy: isolate database-specific substring and array SQL.               |
-| `FunctionTranslator`                   | Registry of application-owned translation strategies.                      |
-| [FieldResolver](src/field-resolver.ts) | Resolve and validate the explicit field allowlist.                         |
-| [ParameterBag](src/parameters.ts)      | Encapsulate per-compilation parameter state and collision checks.          |
+| Component                                                 | Responsibility / Pattern                                                   |
+| --------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [VeilTypeOrmAdapter](src/adapter/veil-typeorm-adapter.ts) | Adapter and facade: validate input and apply a compiled query to TypeORM.  |
+| [QueryCompiler](src/compiler/query-compiler.ts)           | AST interpreter: recursively translate expressions with explicit grouping. |
+| [SqlDialect](src/dialects/sql-dialect.ts)                 | Strategy: isolate database-specific substring and array SQL.               |
+| `FunctionTranslator`                                      | Registry of application-owned translation strategies.                      |
+| [FieldResolver](src/compiler/field-resolver.ts)           | Resolve and validate the explicit field allowlist.                         |
+| [ParameterBag](src/compiler/parameter-bag.ts)             | Encapsulate per-compilation parameter state and collision checks.          |
+
+Source modules are grouped by responsibility:
+
+```text
+src/
+  adapter/
+    resolve-dialect.ts
+    types.ts
+    veil-typeorm-adapter.ts
+  compiler/
+    field-resolver.ts
+    parameter-bag.ts
+    query-compiler.ts
+    types.ts
+  dialects/
+    sql-dialect.ts
+    strategies.ts
+  errors.ts
+  index.ts
+```
+
+The adapter owns TypeORM interaction and driver selection. The compiler depends
+on the dialect interface, not concrete database strategies or TypeORM. Public
+contracts live in the corresponding `types.ts` modules, separate from their
+implementations. Internal imports target their owning modules directly;
+[src/index.ts](src/index.ts) remains the single consumer-facing entry point.
 
 Only the adapter, dialects, errors, and public configuration/result types are
 exported from [src/index.ts](src/index.ts). Compiler implementation details remain
