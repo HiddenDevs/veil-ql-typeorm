@@ -7,12 +7,18 @@ bound as parameters rather than interpolated into SQL.
 
 ## Install
 
-Requires Node.js 22+, TypeORM `^0.3.28`, and Veil-QL `^1.0.2`, matching this
+Requires Node.js 22.12+, TypeORM `^0.3.28`, and Veil-QL `^1.0.2`, matching this
 package's peer dependency ranges. Install your database driver separately.
 
 ```sh
 npm install @hiddendevs/veil-ql-typeorm @hiddendevs/veil-ql typeorm
 ```
+
+Both ESM `import` and CommonJS `require()` are supported. CommonJS uses Node.js
+22.12+'s synchronous ESM loading; both entry points load the same module.
+CommonJS applications that also `require("@hiddendevs/veil-ql")` need a Veil-QL
+release with a `require` export as well; Veil-QL 1.0.5 and earlier only expose
+an `import` export.
 
 ## Usage
 
@@ -277,8 +283,9 @@ npm run build
 ```
 
 Vitest covers generated SQL and executes QueryBuilders against an in-memory
-SQLite database using `sql.js`. Tests include existing predicates, OR grouping,
-injection-shaped values, parameter collisions, parent/subquery interaction,
+SQLite database using `sql.js`. `npm test` builds first and also checks native
+Node.js ESM and CommonJS loading of the built package. Tests include existing
+predicates, OR grouping, injection-shaped values, parameter collisions, parent/subquery interaction,
 joins, renamed columns, pagination, sorting, AST validation, and custom functions.
 All dialect SQL translations are unit-tested. SQLite execution is covered through
 `sql.js`; PostgreSQL and MySQL integration are not run against live database
